@@ -1,0 +1,5 @@
+; $Id$
+name = Numbering System
+description = Allows GHA users to construct numbering templates for projects
+package = GHA Custom
+core = 6.x

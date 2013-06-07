@@ -1,0 +1,13 @@
+name = Image Caption Taxonomy Field
+description = Defines a CCK field that contains an image, caption, and taxonomy term.
+core = 6.x
+version = 6.x-1.5
+dependencies[] = content
+dependencies[] = optionwidgets
+dependencies[] = text
+dependencies[] = filefield
+dependencies[] = imagefield
+dependencies[] = content_taxonomy
+dependencies[] = content_taxonomy_options
+package = CCK
+

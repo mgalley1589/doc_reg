@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Sharp Admin Template</title>
+
+<!-- The recommended practice is to load jQuery from Google's CDN service.  --> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript"></script> 
+
+<!-- Import jQuery UI Javascript & Customer Scripts file  --> 
+<script src="js/jquery-ui-1.7.2.custom.min.js" type="text/javascript"></script>
+<script src="js/ui_scripts.js" type="text/javascript"></script>
+
+<!-- LOAD WYSIWYG EDITOR -->
+<script type="text/javascript" src="js/jquery.wysiwyg.js"></script>
+<link href="css/jquery.wysiwyg.css" rel="stylesheet" type="text/css" />
+
+<!-- LOAD TABLESORTER -->
+<script type="text/javascript" src="js/jquery.tablesorter.min.js"></script>
+
+<script src="js/cufon/cufon-yui.js" type="text/javascript"></script>
+<script src="js/cufon/Qlassik_Font.js" type="text/javascript"></script>
+<script type="text/javascript">
+	Cufon.replace('H1');
+</script>
+
+
+<!-- Import Master CSS File  --> 
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
+		
+        <!--[if lte IE 6]>
+			<script type="text/javascript" src="js/ddpng.js"></script>
+			<script type="text/javascript">
+				DD_belatedPNG.fix('#header');
+				DD_belatedPNG.fix('#navigation img');
+                DD_belatedPNG.fix('#logo img');
+				DD_belatedPNG.fix('.tabNavigation');
+				DD_belatedPNG.fix('.png_bg');
+				DD_belatedPNG.fix('.tabNavigation LI A');
+			</script>
+		<![endif]-->
+
+
+</head>
+
+<body>
+
+	<script type="text/javascript">
+        $(function() {
+        $("#sortable").sortable();
+        $("#sortable").disableSelection();
+        });
+    </script>
+
+<div id="contatiner">
+
+    <div id="header">
+    
+        <div id="logo">
+          <img src="images/logo.png" alt="Your Logo" />
+      </div><!-- END LOGO -->
+        <div id="panel">
+          <p>Welcome Back <strong>Administrator</strong>, you have <a href="#" rel="facebox">2 New Messages</a></p>
+      </div> <!-- END PANEL -->
+   
+    </div><!-- END HEADER -->
+    
+    <div id="navigation">
+    
+    <ul class="tabNavigation">
+        
+        <li><a href="index1.html" title="Users"><img src="images/icons/home_32.png" alt="Home" width="32" height="32" /><span class="tabNavigation_navitem">Dashboard</span></a></li>
+      <li>          <a href="demo.html" title="Users"><img src="images/icons/users_32.png" alt="Manage Content" width="32" height="32" /><span class="tabNavigation_navitem">Users</span></a></li>
+    <li>        <a href="typography.html" title="Users"><img src="images/icons/comment_32.png" alt="Home" width="32" height="32" border="0" /><span class="tabNavigation_navitem">Comments</span></a></li>
+      <li>          <a href="forms.html" title="Users" class="active"><img src="images/icons/chart_flipped_32.png" alt="Home" width="32" height="32" /><span class="tabNavigation_navitem">Statistics</span></a></li>
+      <li>          <a href="#" title="Users"><img src="images/icons/clock_32.png" alt="Home" width="32" height="32" /><span class="tabNavigation_navitem">Schedule</span></a></li>
+      <li>          <a href="#" title="Users"><img src="images/icons/tools_32.png" alt="Home" width="32" height="32" /><span class="tabNavigation_navitem">Settings</span></a></li>  
+                
+    </ul>
+    
+    </div> <!-- END NAVIGATION -->
+    
+    <div id="content">
+    
+<div class="secondary_content">
+
+   		<div class="sidebar">
+
+        <h1 class="h1">Lorem ipsum dolor</h1>
+  <ul>
+            <li>
+                <img src="images/icons/home_32.png" alt="Home" width="32" height="32" class="png_bg" />
+     			<a href="#">Morbi lacinia lacus</a><br />
+                <p>Integer ornare dapibus nulla </p>
+            </li>
+			<li>
+                <img src="images/icons/user_32.png" alt="Users" width="32" height="32" class="png_bg" />
+				<a href="#">Nam ante sapien</a><br />
+                <p>Maecenas eleifend laore</p>
+         	</li>
+            <li class="last">
+                <img src="images/icons/chart_32.png" alt="Stats" width="32" height="32" class="png_bg" />
+                <a href="#">Etiam feugiat ornare</a>
+       			<p>Sed id quam in urna</p>
+            </li>
+        </ul>
+        
+        <h1 class="h1">Lorem ipsum dolor</h1>
+  <ul>
+        	<li>
+                <img src="images/icons/book_32.png" alt="Home" width="32" height="32" class="png_bg" />
+      			<a href="#">Morbi lacinia lacus</a><br />
+                <p>Integer ornare dapibus nulla </p>
+        	</li>
+			<li>
+                <img src="images/icons/lock_32.png" alt="Users" width="32" height="32" class="png_bg" />
+				<a href="#">Nam ante sapien</a><br />
+                <p>Maecenas eleifend laore</p>
+          	</li>
+			<li class="last">
+                <img src="images/icons/star_32.png" alt="Stats" width="32" height="32" class="png_bg" />
+                <a href="#">Etiam feugiat ornare</a>
+       			<p>Sed id quam in urna</p>
+          </li>
+        </ul>
+        
+        
+        <h1 class="h1">Praesent cursus</h1>
+  <ul>
+            <li>
+                <img src="images/icons/search_32.png" alt="" width="32" height="32" class="png_bg" />
+      			<a href="#">Morbi lacinia lacus</a><br />
+                <p>Integer ornare dapibus nulla</p>
+          	</li>
+			<li>
+                <img src="images/icons/tools_32.png" alt="Settings" width="32" height="32" class="png_bg" />
+				<a href="#">Nam ante sapien</a><br />
+                <p>Maecenas eleifend laore</p>
+         	</li>
+			<li class="last">
+                <img src="images/icons/email_32.png" alt="Mail" width="32" height="32" class="png_bg" />
+				<a href="#">Etiam feugiat ornare</a><br />
+                <p>Sed id quam in urn</p>
+            </li>
+        </ul>
+  
+        </div><!-- END SIDEBAR -->
+    
+
+    </div><!-- END SECONDARY CONTEMT -->
+    
+    
+  <div id="main_content">
+	 <h1 class="h1">Forms</h1>
+      <p>Here are some example form elements. You can add some custom classes like small, medium and last to adjust to your own needs.</p>
+            <form action="" method="get">
+            <p>
+            <label>Small Form Field</label>
+            <input name="textfield1" type="text" class="input small" id="textfield1" value="Small..."/>
+            </p>
+            <p>
+            <label>Medium Form Field</label>
+            <input name="textfield2" type="text" class="input medium" id="textfield2" value="Medium..." />
+            </p>
+            <p>
+            <label>Large Form Field</label>
+            <input name="textfield3" type="text" class="input large" id="textfield3" value="Large..." />
+            </p>
+            <div class="spacer">&nbsp;</div>
+
+              <p>
+            <label>Check Boxes</label>
+            </p>
+            
+            <p>
+    <input name="check1" type="checkbox" class="checkbox" id="check1" />        
+    This is a checkbox </p>
+            
+            <p>
+              <input name="check2" type="checkbox" class="checkbox" id="check2" checked="checked" />
+              This is another checkbox </p>
+            <p>
+            <label>Radio Buttons</label>
+            <input name="radio" type="radio" class="radio" id="radio1" value="radio1" />
+            This is a radio option </p>
+             <p>
+               <input name="radio" type="radio" class="radio" id="radio2" value="radio1" />
+               Another Radio Option</p>
+             <p>
+               <input name="radio" type="radio" class="radio" id="radio3" value="radio3" />
+               Last Radio Option </p>
+             <p>
+            <label>Drop Down (Combo) List</label>
+             <select name="combo" class="select input">
+               <option value="Option 1">Option 1</option>
+               <option value="Option 2">Option 2</option>
+               <option value="Option 3">Option 3</option>
+               <option value="Option 4">Option 4</option>
+               <option value="Option 5">Option 5</option>
+             </select>
+             </p>
+            
+            
+            <p>
+            <label>This is a text area...</label>
+            <textarea name="textarea" cols="50" rows="7" class="styled_textarea wysiwyg">Text area for lots of lines of text...</textarea>
+            </p>
+            <p>
+            <input type="button" class="button" value="Submit" />
+            </p>
+            </form>   
+    
+    
+ </div><!-- END MAIN CONTENT -->
+ <div class="secondary_content">
+
+	<div class="sidebar">
+   	<h1 class="h1">Date Picker</h1>
+   	<div id="datepicker"></div>
+   
+   	<h1 class="h1">TO-DO List</h1>
+   	<ul id="sortable">
+        <li class="ui-state-default">Create Logo</li>
+        <li class="ui-state-default">E-Mail Clients</li>
+        <li class="ui-state-default">Order Pizza</li>
+        <li class="ui-state-default">Take Out Trash</li>
+        <li class="ui-state-default">Subscribe to Nettuts!</li>
+        <li class="ui-state-default">Prepare Dinner</li>
+        <li class="ui-state-default">Walk Dog</li>
+        <li class="ui-state-default">Eat Dinner</li>
+    </ul>
+       </div><!-- END SIDEBAR -->    
+     
+    
+
+    </div><!-- END SECONDARY CONTEMT -->
+    </div><!-- END CONTEMT -->
+
+</div><!-- END CONTAINER -->
+
+<div id="footer"><p>© Copyright 2009 Your Company | Powered by <a href="#">Sharp Admin Template</a> | <a href="#">Top</a></p>
+</div>
+<script type="text/javascript"> Cufon.now(); </script>
+</body>
+</html>

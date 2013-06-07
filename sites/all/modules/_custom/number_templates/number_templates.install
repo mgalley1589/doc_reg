@@ -1,0 +1,116 @@
+<?php
+// $Id$
+/**
+* Implementation of hook_schema().
+* Describes module tables to Drupal
+*/
+
+function number_templates_schema() {
+	$schema['number_templates'] = array(
+		'description' => t('Stores numbering templates that are created by users'),
+		'fields' => array(
+			'template_id' => array(
+				'type' => 'int',
+				'description' => t('Unique ID for the template. Auto Incremented'),
+	            'not null' => TRUE,
+				'unsigned' => TRUE,
+				'default' => 0,
+				),
+			'template_name' => array(
+				'type' => 'text',
+				'size' => 'normal',
+				'not null' => TRUE,
+				),
+			'seperator' => array(
+				'type' => 'text',
+				'size' => 'normal',
+				'not null' => TRUE,
+				),
+			),
+			'primary key' => array('template_id'),
+			);		
+	$schema['number_templates_identifiers'] = array(
+		'description' => t('Stores numbering templates identifers, providing dynamic headings'),
+		'fields' => array(
+			'template_id' => array(
+				'type' => 'int',
+				'description' => t('Foreign Key for Number Templates Table'),
+				'not null' => TRUE,
+				'unsigned' => TRUE,
+				'default' => 0,
+				),
+			'identifier_one' => array(
+				'type' => 'text',
+				'description' => t('A dynamic identifer for a number template'),
+				),
+			'identifier_two' => array(
+				'type' => 'text',
+				'description' => t('A dynamic identifer for a number template'),
+				),
+			'identifier_three' => array(
+				'type' => 'text',
+				'description' => t('A dynamic identifer for a number template'),
+				),
+			'identifier_four' => array(
+				'type' => 'text',
+				'description' => t('A dynamic identifer for a number template'),
+				),
+			'identifier_five' => array(
+				'type' => 'text',
+				'description' => t('A dynamic identifer for a number template'),
+				),
+			),
+			'indexes' => array(
+      			'template_id' => array('template_id'),
+      		),
+      		'unique keys' => array(
+				'template_id' => array('template_id'), ),
+      		);
+$schema['number_templates_values'] = array(
+		'description' => t('Stores numbering templates values'),
+		'fields' => array(
+			'template_id' => array(
+				'type' => 'int',
+				'description' => t('Foreign Key'),
+				'not null' => FALSE,
+				'unsigned' => TRUE,
+				'default' => 0,
+				),
+       'group' => array(
+				'type' => 'int',
+				'description' => t('Group'),
+				),
+			'identifier_value' => array(
+				'type' => 'text',
+				'description' => t('Identifier Value'),
+				),
+				),
+				'indexes' => array(
+      			'template_id' => array('template_id'),
+				),
+				);
+		return $schema;
+}
+
+
+
+/**
+* Implementation of hook_install()
+* Automatically configures the database tables for the module on activation at admin/build/modules
+*/
+
+function number_templates_install() {
+	// User Schema API to Create database table
+	drupal_install_schema('number_templates');
+}
+
+/**
+* Implementation of hook_unisintall()
+* Removes table on deactivation of the module
+*/
+
+function number_templates_uninstall() {
+	// Use Schema API to delete database table
+	drupal_uninstall_schema('number_templates');	
+}
+

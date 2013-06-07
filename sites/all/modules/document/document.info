@@ -1,0 +1,12 @@
+; $Id: document.info,v 1.2.2.1 2010/06/03 08:01:19 rhoney Exp $ 
+name = Document
+description = Allows users to upload Documents, search & download them.
+core = 6.x
+dependencies[] = taxonomy
+
+; Information added by drupal.org packaging script on 2010-07-29
+version = "6.x-1.0-beta2"
+core = "6.x"
+project = "document"
+datestamp = "1280431509"
+

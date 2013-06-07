@@ -1,0 +1,6 @@
+;$Id$
+
+name = GHA Livigunn Revisions
+description = Provides Revision Functionality
+core = 6.x
+package = GHA Livigunn Custom

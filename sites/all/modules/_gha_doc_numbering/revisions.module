@@ -1,0 +1,60 @@
+<?php
+// $Id$
+/**
+
+ * @file
+ * Provides revisions fucntionality for all issued and received documents.
+ */
+
+
+/**
+ * * Implementation of hook_menu(). Array describing the hook_menu() function.
+ */
+function revisions_menu() {
+  $items['admin/settings/revisions'] = array(
+    'title' => 'Revision Settings',
+    'description' => 'Administer settings for the revisions module.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('revisions_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'revisions.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Define the form for entering a document revision
+ */
+function revisions_entry_form($form_state, $node) {
+  //Define a fieldset
+  $form['revisions'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Document Revisions'),
+    );
+
+  //Define a textarea inside the fieldset.
+  $form['revisions']['note'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Notes'),
+    '#default_value' => isset($node->revisions) ? $node->revisions : '',
+    '#description' => t('Add Document Revision')
+    );
+
+  // Node ID is saved
+  $form['revisions']['nid'] = array(
+    '#type' => 'value',
+    '#value' => $node->nid,
+    );
+
+
+  //Form submit function
+  $form['revisions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+  return $form;
+}
+
+

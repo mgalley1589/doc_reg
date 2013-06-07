@@ -1,0 +1,5 @@
+; $Id$
+name = GHA Admin Module
+description = Effects various changes within Drupal core to allow the doc reg system to work. Disabling will prevent the entire system working
+package = GHA Custom
+core = 6.x

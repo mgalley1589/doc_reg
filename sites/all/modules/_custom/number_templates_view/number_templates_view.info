@@ -1,0 +1,5 @@
+; $Id$
+name = Number Templates - View Module
+description = Allows GHA users to view previously constructed number templates.
+package = GHA Custom
+core = 6.x

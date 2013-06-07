@@ -1,0 +1,5 @@
+; $Id$
+name = Revisions
+description = Adds compound CCK fields for Date & Revisions to the Issued / Received documents content type. Allows for multiple values per field.
+package = GHA Custom
+core = 6.x

@@ -1,0 +1,5 @@
+; $Id$
+name = Number Templates
+description = Allows GHA users to construct document numbering templates for projects
+package = GHA Custom
+core = 6.x

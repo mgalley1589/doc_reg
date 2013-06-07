@@ -1,0 +1,23 @@
+<?php
+
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ */
+ 
+
+function gha_admin_form_alter(&$form, $form_state, $form_id) {
+  
+  switch ($form_id) {
+    // This is our form ID.
+    case 'project_node_form':
+      // Print out the $form array to see all the elements we are working with.
+      //$output .= print_r($form);
+      // Once I know which part of the array I'm after we can change it.
+     // unset $form['#content_extra_fields']['revision_information'];
+      // Change the Username field title to Login ID.
+     // $form['account']['name']['#title'] = t('Login ID');
+      break;
+  }
+}

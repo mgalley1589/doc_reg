@@ -1,0 +1,380 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * This is a Drupal Module - Image Caption Taxonomy Field
+ * It implements the Image Caption Taxonomy field for CCK
+ *
+ * There is a companion article explaining this module's development
+ * at http://poplarware.com/cckfieldmodule.html
+ *
+ * Copyright 2009 Jennifer Hodgdon, Poplar ProductivityWare LLC
+ * 
+ * Licensed under the GNU Public License
+ */
+
+/**
+ * Implementation of hook_init().
+ *
+ * Makes sure the right files have been loaded.
+ */
+function img_cap_tax_fld_init() {
+  module_load_include('inc', 'filefield', 'filefield_widget');
+  module_load_include('inc', 'imagefield', 'imagefield_widget');
+  module_load_include('inc', 'imagefield', 'imagefield_field');
+  module_load_include('inc', 'img_cap_tax_fld', 'img_cap_tax_fld_widget');
+  module_load_include('inc', 'img_cap_tax_fld', 'img_cap_tax_fld_field');
+}
+
+/* --------- Field information ----------- */
+
+/**
+ * Implementation of CCK's hook_field_info().
+ *
+ * Returns basic information about this CCK field.
+ */
+function img_cap_tax_fld_field_info() {
+  return array(
+    'img_cap_tax' => array(
+      'label' => t('Image Caption Taxonomy'),
+      'description' => t('Stores an image file, text for alt and title tags, a caption, and a taxonomy term'),
+    )
+  );
+}
+
+/**
+ * Implementation of hook_install().
+ * 
+ * Lets CCK take care of this.
+ */
+function img_cap_tax_fld_install() {
+  content_notify('install', 'img_cap_tax');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ * 
+ * Lets CCK take care of this.
+ */
+function img_cap_tax_fld_uninstall() {
+  content_notify('uninstall', 'img_cap_tax');
+}
+
+/**
+ * Implementation of hook_enable().
+ * 
+ * Lets CCK take care of this.
+ */
+function img_cap_tax_fld_enable() {
+  content_notify('enable', 'img_cap_tax');
+}
+
+/**
+ * Implementation of hook_disable().
+ * 
+ * Lets CCK take care of this.
+ */
+function img_cap_tax_fld_disable() {
+  content_notify('disable', 'img_cap_tax');
+}
+
+/** Implementation of CCK's hook_field_settings().
+ *
+ * Defines database storage for this field, and field settings forms.
+ *
+ * Mostly defers to FileField, which will take care of the DB storage for
+ * the image file itself. Other functions called are in the 
+ * img_cap_tax_fld_field.inc include file.
+ */
+function img_cap_tax_fld_field_settings( $op, $field ) {
+  switch( $op ) {
+    case 'form':
+      return img_cap_tax_fld_field_settings_form( $field );
+
+    case 'save':
+      return img_cap_tax_fld_field_settings_save( $field );
+
+    default:
+      return filefield_field_settings( $op, $field );
+  }
+}
+
+/** Implementation of CCK's hook_field().
+ *
+ * Handles database storage for the field.
+ *
+ * Sanitizes the caption according to the input format.
+ * Defers to FileField to do the right thing with the file.
+ * The only thing Content Taxonomy would do is
+ * try to save the taxonomy on the node, and we don't want that. 
+ */
+function img_cap_tax_fld_field($op, $node, $field, &$items, $teaser, $page) {
+  if( $op == 'sanitize' ) {
+    img_cap_tax_fld_field_sanitize( $node, $field, $items, $teaser, $page );
+  }
+  return filefield_field( $op, $node, $field, $items, $teaser, $page );
+}
+
+/** Implementation of CCK's hook_content_is_empty().
+ *
+ * Defines the field as empty if there is no file uploaded,
+ * deferring to FileField to make that decision.
+ */
+function img_cap_tax_fld_content_is_empty( $item, $field ) {
+  return filefield_content_is_empty( $item, $field );
+}
+
+/** Implementation of CCK's hook_default_value().
+ *
+ * Defers to FileField, as we don't have a default for the
+ * caption, and Taxonomy Content doesn't have a default either.
+ */
+function img_cap_tax_fld_default_value(&$form, &$form_state, $field, $delta) {
+  return filefield_default_value($form, $form_state, $field, $delta);
+}
+
+/* --------- Widget information ----------- */
+
+/**
+ * Implementation of CCK's hook_widget_info().
+ *
+ * Returns basic information about the widget.
+ */
+function img_cap_tax_fld_widget_info() {
+  return array(
+    'img_cap_tax_sel_widget' => array(
+      'label' => t('Image, Caption, Taxonomy Select'),
+      'field types' => array('img_cap_tax'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+      'callbacks' => array('default value' => CONTENT_CALLBACK_CUSTOM),
+      'description' => t('An edit widget for Image Caption Taxonomy fields that allows upload/preview of the image, and chooses taxonomy terms from a drop-down select list.' ),
+    ),
+  );
+}
+
+/**
+ * Implementation of Form API's hook_elements().
+ *
+ * Returns a skeleton Form API array that defines callbacks 
+ * for the widget form, following what Imagefield does. 
+ * Callback functions are in file img_cap_tax_fld_widget.inc.
+ */
+function img_cap_tax_fld_elements() {
+  $imgel = imagefield_elements();
+  $elements = array( 'img_cap_tax_sel_widget' => $imgel[ 'imagefield_widget' ]);
+  $elements['img_cap_tax_sel_widget']['#process'][] = 'img_cap_tax_fld_widget_process';
+  $elements['img_cap_tax_sel_widget']['#element_validate']= array('img_cap_tax_fld_widget_validate' );
+
+  return $elements;
+}
+
+/**
+ * Implementation of CCK's hook_widget().
+ *
+ * Returns a skeleton Form API array that defines callbacks 
+ * for the widget form. Note that filefield_widget assumes a
+ * file (module)_widget.inc exists!
+ */
+function img_cap_tax_fld_widget(&$form, &$form_state, $field, $items, $delta = 0) {
+
+  // Make sure the default values array is set up for filefield_widget
+  if (empty($items[$delta]['data'])) {
+    $items[$delta]['data'] = array('alt' => '', 'title' => '', 'caption' => '', 'value' => 0);
+  }
+
+  // for some reason, sometimes this is not unserialized, not sure why
+  if( !is_array( $items[$delta]['data'] )) {
+    $items[$delta]['data'] = unserialize( $items[ $delta ]['data'] );
+  }
+
+  $element = filefield_widget($form, $form_state, $field, $items, $delta);
+  // add additional validators from ImageField module
+  $element['#upload_validators'] += imagefield_widget_upload_validators($field);
+
+  return $element;
+}
+
+/**
+ * Implementation of CCK hook_widget_settings().
+ *
+ * Defers to filefield_widget_settings to create a widget settings form.
+ * That function calls callback functions (widget)_widget_settings_(op)
+ * in img_cap_tax_fld_widget.inc (see img_cap_tax_fld_widget.inc)
+ */
+function img_cap_tax_fld_widget_settings( $op, $widget ) {
+  switch ($op) {
+    case 'form':
+      return img_cap_tax_fld_widget_settings_form($widget);
+    case 'validate':
+      return imagefield_widget_settings_validate($widget);
+    case 'save':
+      return img_cap_tax_fld_widget_settings_save($widget);
+  }
+}
+
+/* --------- Formatter information ----------- */
+
+/**
+ * Implementation of CCK's hook_field_formatter_info().
+ *
+ * Returns information about available field formatters.
+ */
+function img_cap_tax_fld_field_formatter_info() {
+  return array( 
+    'default' => array( 
+       'label' => t( 'Image with Caption and Taxonomy Terms' ),
+       'field types' => array( 'img_cap_tax' ),
+    ),
+  );
+}
+
+/* --------- Theming ----------- */
+
+/**
+ * Implementation of hook_theme().
+ *
+ * Registers themeable elements for widgets and formatters
+ */
+function img_cap_tax_fld_theme() {
+  return array(
+    'img_cap_tax_sel_widget' => array( 
+       'arguments' => array('element' => NULL), 
+    ),
+
+    'img_cap_tax_fld_formatter_default' => array( 
+       'arguments' => array('element' => NULL), 
+    ),
+  );
+}
+
+/* Theme function for widget form -- Drupal standard rendering */
+function theme_img_cap_tax_sel_widget(&$element) {
+  return theme( 'form_element', $element, $element['#children'] );
+}
+
+/* Theme function for field formatter - display image, caption, and taxonomy
+ */
+function theme_img_cap_tax_fld_formatter_default( $element = NULL ) {
+
+  // If there is no data, just return
+  if( empty( $element['#item'] )) {
+    return '';
+  }
+
+  // Let ImageField handle the image, alt, and title
+  $img = theme( 'imagefield_formatter_image_plain', $element );
+
+  // caption
+  $cap = $element['#item']['safe_caption'];
+
+  // taxonomy
+  $tax = '';
+  $sep = '';
+  $val = $element['#item']['data']['value'];
+  if( !is_array( $val )) {
+    $val = array( $val );
+  }
+  foreach( $val as $tid ) {
+    $term = taxonomy_get_term( $tid );
+    $tax .= $sep . check_plain( $term->name );
+    $sep = ', ';
+  }
+
+  // put it all together
+
+  return '<div class="imgcaptax_outer">' .
+    '<div class="imgcaptax_img">' . $img . '</div>' .
+    '<div class="imgcaptax_cap">' . $cap . '</div>' .
+    '<div class="imgcaptax_tax">' . $tax . '</div>' .
+    '</div>';
+}
+
+/**
+ * Implements hook_file_download.
+ *
+ * This is needed if you are using the Private file download method, to
+ * tell the file system it's OK to allow downloading the image files on our
+ * field. It's basically a copy of fielefield_file_download(), with our field
+ * type substituted.
+ */
+function img_cap_tax_fld_file_download($file) {
+  $file = file_create_path($file);
+
+  $result = db_query("SELECT * FROM {files} WHERE filepath = '%s'", $file);
+  if (!$file = db_fetch_object($result)) {
+    // We don't really care about this file.
+    return;
+  }
+
+  // Find out if any filefield contains this file, and if so, which field
+  // and node it belongs to. Required for later access checking.
+  $cck_files = array();
+  foreach (content_fields() as $field) {
+    if ($field['type'] == 'img_cap_tax') {
+      $db_info = content_database_info($field);
+      $table = $db_info['table'];
+      $fid_column = $db_info['columns']['fid']['column'];
+
+      $columns = array('vid', 'nid');
+      foreach ($db_info['columns'] as $property_name => $column_info) {
+        $columns[] = $column_info['column'] .' AS '. $property_name;
+      }
+      $result = db_query("SELECT ". implode(', ', $columns) ."
+                          FROM {". $table ."}
+                          WHERE ". $fid_column ." = %d", $file->fid);
+
+      while ($content = db_fetch_array($result)) {
+        $content['field'] = $field;
+        $cck_files[$field['field_name']][$content['vid']] = $content;
+      }
+    }
+  }
+  // If no filefield item is involved with this file, we don't care about it.
+  if (empty($cck_files)) {
+    return;
+  }
+
+  // If any node includes this file but the user may not view this field,
+  // then deny the download.
+  foreach ($cck_files as $field_name => $field_files) {
+    if (!filefield_view_access($field_name)) {
+      return -1;
+    }
+  }
+
+  // So the overall field view permissions are not denied, but if access is
+  // denied for a specific node containing the file, deny the download as well.
+  // It's probably a little too restrictive, but I can't think of a
+  // better way at the moment. Input appreciated.
+  // (And yeah, node access checks also include checking for 'access content'.)
+  $nodes = array();
+  foreach ($cck_files as $field_name => $field_files) {
+    foreach ($field_files as $revision_id => $content) {
+      // Checking separately for each revision is probably not the best idea -
+      // what if 'view revisions' is disabled? So, let's just check for the
+      // current revision of that node.
+      if (isset($nodes[$content['nid']])) {
+        continue; // don't check the same node twice
+      }
+      $node = node_load($content['nid']);
+      if (!node_access('view', $node)) {
+        // You don't have permission to view the node this file is attached to.
+        return -1;
+      }
+      $nodes[$content['nid']] = $node;
+    }
+  }
+
+  // Well I guess you can see this file.
+  $name = mime_header_encode($file->filename);
+  $type = mime_header_encode($file->filemime);
+  // Serve images and text inline for the browser to display rather than download.
+  $disposition = ereg('^(text/|image/)', $file->filemime) ? 'inline' : 'attachment';
+  return array(
+    'Content-Type: '. $type .'; name='. $name,
+    'Content-Length: '. $file->filesize,
+    'Content-Disposition: '. $disposition .'; filename='. $name,
+    'Cache-Control: private',
+  );
+}

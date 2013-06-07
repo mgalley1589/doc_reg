@@ -1,0 +1,7 @@
+; $Id:$
+name = Person Field
+description = A CCK compound field representing a person
+dependencies[] = content
+package = CCK
+core = 6.x
+version = 6.x-1.0

@@ -1,0 +1,370 @@
+<?php
+// $Id$
+
+/**
+* @file
+* Number generation
+*/
+
+/**
+* Implementation of hook_menu()
+*/
+
+function number_templates_menu() {
+	$items['number_templates'] = array(
+		'title' => 'Create a new number template	',
+		'page callback' => 'number_templates_page',
+		'access arguments' => array('access content'),
+	);
+	return $items;
+	
+}
+
+/**
+* Menu Callback.
+* Called when user goes to http://domain.com/number_templates
+*/
+
+function number_templates_page() {
+	$output = t('');
+	
+	// Return the HTML generated from the $form data structure.
+	$output .= drupal_get_form('number_templates_nameform');
+	return $output;
+}
+
+
+/**
+* Define the form for Template Generation
+*/ 
+
+function number_templates_nameform() {
+  $form['template_name'] = array(
+		'#title' => t('Template Title'),
+		'#type' => 'textfield',
+		'#description' => t('Enter Template Title'),
+    '#required' => TRUE
+		);
+   $form['client_name'] = array(
+		'#title' => t('Client Name'),
+		'#type' => 'textfield',
+		'#description' => t('Enter Client Name'),
+    '#required' => TRUE
+		);
+ 	$form['seperator'] = array(
+		'#title' => t('Number Seperator'),
+		'#type' => 'textfield',
+		'#description' => t('Enter desired seperator - will default to "/" if not changed')
+		);
+	
+	$form['identifier_one'] = array(
+		'#title' => t('Identifier One'),
+		'#type' => 'textfield',
+		'#description' => t('Enter the title for the first document identifier. E.G. "Project ID"		'),
+     '#prefix' => '<div id="identifier-one-container">',
+     '#suffix' => '</div>'
+      );
+	
+		
+		
+	$form['identifier_two'] = array(
+		'#title' => t('Identifier Two'),
+		'#type' => 'textfield',
+		'#description' => t('Enter the title for the first document identifier. E.G. "Sub Project"		'),
+    '#prefx' => '<div class="number-templates-identifier">',
+    '#suffix' => '</div>'
+		);
+	
+
+
+		
+	$form['identifier_three'] = array(
+		'#title' => t('Identifier Three'),
+		'#type' => 'textfield',
+		'#description' => t('Enter the title for the first document identifier. E.G. "Discipline"		')
+		);
+		
+		
+	
+		
+	$form['identifier_four'] = array(
+		'#title' => t('Identifier Four'),
+		'#type' => 'textfield',
+		'#description' => t('Enter the title for the first document identifier. E.G. "Type"		')
+		);
+		
+	
+		
+	$form['identifier_five'] = array(
+		'#title' => t('Identifier Five - id # of documents'),
+		'#type' => 'textfield',
+		'#description' => t('Enter the title for the first document identifier. E.G. "Unique Document Number"		')
+		);
+		
+  
+  $form['identifier_one_fieldset'] = array(
+	'#title' => t('Identifier One Values'),
+	'#type' => 'fieldset',
+	'#description' => t('Define Identifer One Values'),
+	'#collapsible' => TRUE,
+	'#collapsed' => TRUE,
+      '#prefix' => '<div id="identifier-one-values-container">',
+     '#suffix' => '</div>'
+	);
+		$form['identifier_one_fieldset']['io_value_one'] = array(
+		'#title' => t('Value One'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the first document identifier.	')
+		);
+		$form['identifier_one_fieldset']['io_value_two'] = array(
+		'#title' => t('Value Two'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the first document identifier.	')
+		);
+		$form['identifier_one_fieldset']['io_value_three'] = array(
+		'#title' => t('Value Three'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the first document identifier.	')
+		);
+		$form['identifier_one_fieldset']['io_value_four'] = array(
+		'#title' => t('Value Four'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the first document identifier.	')
+		);
+		$form['identifier_one_fieldset']['io_value_five'] = array(
+		'#title' => t('Value Five'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the first document identifier.	')
+		);
+		
+	
+    
+    /* Fieldsets for Identifer Values */
+    	$form['identifier_one_fieldset'] = array(
+	'#title' => t('Identifier One Values'),
+	'#type' => 'fieldset',
+	'#description' => t('Define Identifer One Values'),
+	'#collapsible' => TRUE,
+	'#collapsed' => TRUE
+	);
+		$form['identifier_one_fieldset']['io_value_one'] = array(
+		'#title' => t('Value One'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the first document identifier.	')
+		);
+		$form['identifier_one_fieldset']['io_value_two'] = array(
+		'#title' => t('Value Two'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the first document identifier.	')
+		);
+		$form['identifier_one_fieldset']['io_value_three'] = array(
+		'#title' => t('Value Three'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the first document identifier.	')
+		);
+		$form['identifier_one_fieldset']['io_value_four'] = array(
+		'#title' => t('Value Four'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the first document identifier.	')
+		);
+		$form['identifier_one_fieldset']['io_value_five'] = array(
+		'#title' => t('Value Five'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the first document identifier.	')
+		);
+    
+		
+    $form['identifier_two_fieldset'] = array(
+	'#title' => t('Identifier Two Values'),
+	'#type' => 'fieldset',
+	'#description' => t('Define Identifer two Values'),
+	'#collapsible' => TRUE,
+	'#collapsed' => TRUE
+	);
+		$form['identifier_two_fieldset']['it_value_one'] = array(
+		'#title' => t('Value One'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the second document identifier.	')
+		);
+		$form['identifier_two_fieldset']['it_value_two'] = array(
+		'#title' => t('Value Two'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the second document identifier.	')
+		);
+		$form['identifier_two_fieldset']['it_value_three'] = array(
+		'#title' => t('Value Three'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the second document identifier.	')
+		);
+		$form['identifier_two_fieldset']['it_value_four'] = array(
+		'#title' => t('Value Four'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the second document identifier.	')
+		);
+		$form['identifier_two_fieldset']['it_value_five'] = array(
+		'#title' => t('Value Five'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the second document identifier.	')
+		);
+    
+    $form['identifier_three_fieldset'] = array(
+	'#title' => t('Identifier Three Values'),
+	'#type' => 'fieldset',
+	'#description' => t('Define Identifer three Values'),
+	'#collapsible' => TRUE,
+	'#collapsed' => TRUE
+	);
+		$form['identifier_three_fieldset']['ith_value_one'] = array(
+		'#title' => t('Value One'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the third document identifier.	')
+		);
+		$form['identifier_three_fieldset']['ith_value_two'] = array(
+		'#title' => t('Value Two'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the third document identifier.	')
+		);
+		$form['identifier_three_fieldset']['ith_value_three'] = array(
+		'#title' => t('Value Three'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the third document identifier.	')
+		);
+		$form['identifier_three_fieldset']['ith_value_four'] = array(
+		'#title' => t('Value Four'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the third document identifier.	')
+		);
+		$form['identifier_three_fieldset']['ith_value_five'] = array(
+		'#title' => t('Value Five'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the third document identifier.	')
+		);
+    
+    $form['identifier_four_fieldset'] = array(
+	'#title' => t('Identifier four Values'),
+	'#type' => 'fieldset',
+	'#description' => t('Define Identifer four Values'),
+	'#collapsible' => TRUE,
+	'#collapsed' => TRUE
+	);
+		$form['identifier_four_fieldset']['if_value_one'] = array(
+		'#title' => t('Value One'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the fourth document identifier.	')
+		);
+		$form['identifier_four_fieldset']['if_value_two'] = array(
+		'#title' => t('Value Two'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the fourth document identifier.	')
+		);
+		$form['identifier_four_fieldset']['if_value_three'] = array(
+		'#title' => t('Value Three'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the fourth document identifier.	')
+		);
+		$form['identifier_four_fieldset']['if_value_four'] = array(
+		'#title' => t('Value Four'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the fourth document identifier.	')
+		);
+		$form['identifier_four_fieldset']['if_value_five'] = array(
+		'#title' => t('Value Five'),
+		'#type' => 'textfield',
+		'#description' => t('Enter a value for the fourth document identifier.	')
+		);
+		
+		
+		
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Submit')
+	);
+	return $form;
+}
+
+	
+/**
+* Form Validation function
+*/
+
+function number_templates_nameform_validate($form, &$form_state) {
+
+// Some Validation Code Goes Here
+
+
+}
+	
+/**
+* Handle post-valiation form submission - Goes to db
+*/
+
+function number_templates_nameform_submit($form, &$form_state) {
+
+// Save the template info to the dataase 
+$sql= "INSERT into {number_templates} VALUES(0, '%s', '%s', '%s')";
+db_query ($sql, $form_state['values']['template_name'], $form_state['values']['seperator']. $form_state['values']['client_name']);
+
+//create a variable to hold the template ID - select the ID from the last entry in the number_templates table
+$temp_id = db_result(db_query('SELECT template_id from number_templates ORDER BY template_id DESC LIMIT 1'));
+
+
+// Save the template identifiers to the database
+$sqlTwo = "INSERT into {number_templates_identifiers} VALUES(%d, '%s', '%s', '%s', '%s', '%s')";
+db_query ($sqlTwo, $temp_id, $form_state['values']['identifier_one'],$form_state['values']['identifier_two'],$form_state['values']['identifier_three'],$form_state['values']['identifier_four'],$form_state['values']['identifier_five']);
+
+// As number of identifier values is not known before runtime,
+// We create a dynamic query using db_placeholder.
+
+// Define some variables for inserting all values into identifier values table
+$sqlThree = "INSERT into {number_templates_values} VALUES(%d, %d, '%s')";
+$groupOne = 1;
+$groupTwo = 2;
+$groupThree = 3;
+$groupFour = 4;
+$groupFive = 5;
+
+// identifier one values INSERT query
+
+db_query ($sqlThree, $temp_id, $groupOne, $form_state['values']['io_value_one']);
+db_query ($sqlThree, $temp_id, $groupOne, $form_state['values']['io_value_two']);
+db_query ($sqlThree, $temp_id, $groupOne, $form_state['values']['io_value_three']);
+db_query ($sqlThree, $temp_id, $groupOne, $form_state['values']['io_value_four']);
+db_query ($sqlThree, $temp_id, $groupOne, $form_state['values']['io_value_five']);
+
+// identifier two values INSERT query
+db_query ($sqlThree, $temp_id, $groupTwo, $form_state['values']['it_value_one']);
+db_query ($sqlThree, $temp_id, $groupTwo, $form_state['values']['it_value_two']);
+db_query ($sqlThree, $temp_id, $groupTwo, $form_state['values']['it_value_three']);
+db_query ($sqlThree, $temp_id, $groupTwo, $form_state['values']['it_value_four']);
+db_query ($sqlThree, $temp_id, $groupTwo, $form_state['values']['it_value_five']);
+
+// identifier three values INSERT query
+db_query ($sqlThree, $temp_id, $groupThree, $form_state['values']['ith_value_one']);
+db_query ($sqlThree, $temp_id, $groupThree, $form_state['values']['ith_value_two']);
+db_query ($sqlThree, $temp_id, $groupThree, $form_state['values']['ith_value_three']);
+db_query ($sqlThree, $temp_id, $groupThree, $form_state['values']['ith_value_four']);
+db_query ($sqlThree, $temp_id, $groupThree, $form_state['values']['ith_value_five']);
+
+
+// identifier four values INSERT query
+db_query ($sqlThree, $temp_id, $groupFour, $form_state['values']['if_value_one']);
+db_query ($sqlThree, $temp_id, $groupFour, $form_state['values']['if_value_two']);
+db_query ($sqlThree, $temp_id, $groupFour, $form_state['values']['if_value_three']);
+db_query ($sqlThree, $temp_id, $groupFour, $form_state['values']['if_value_four']);
+db_query ($sqlThree, $temp_id, $groupFour, $form_state['values']['if_value_five']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+drupal_set_message(t('Your template been saved. You can now assign numbers to projects using this template at the <a href=\'/numbering_system\'>Numbering System Page</a>'));
+
+ } 

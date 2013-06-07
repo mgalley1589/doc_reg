@@ -1,0 +1,247 @@
+<?php
+// $Id:$
+
+/**
+ * @file
+ * This is a Drupal Module - Revision
+ * It implements a Revision Field for CCK
+ *
+ * Copyright 2011 Matt Galley - Gk Consulting & Analysis LTD
+ *
+ */
+
+
+/**
+ * Implementation of CCK's hook_field_info().
+ *
+ * Returns basic information about this CCK field.
+ */
+function revision_fld_field_info() {
+  return array(
+    'revision' => array(
+      'label' => t('Revision'),
+      'description' => t('Stores information about a document revision.'),
+    )
+  );
+}
+
+
+/**
+ * Implementation of hook_install().
+ *
+ * Lets CCK take care of this.
+ */
+function revision_fld_install() {
+  content_notify('install', 'revision');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ *
+ * Lets CCK take care of this.
+ */
+function revision_fld_uninstall() {
+  content_notify('uninstall', 'revision');
+}
+
+/**
+ * Implementation of hook_enable().
+ *
+ * Lets CCK take care of this.
+ */
+function revision_fld_enable() {
+  content_notify('enable', 'revision');
+}
+
+/**
+ * Implementation of hook_disable().
+ *
+ * Lets CCK take care of this.
+ */
+function revision_fld_disable() {
+  content_notify('disable', 'revision');
+}
+
+/**
+ * Implementation of CCK hook_field_settings().
+ */
+function revision_fld_field_settings($op, $field) {
+  switch ($op) {
+    case 'database columns':
+      $columns['revision'] = array('type' => 'varchar', 'length' => 255, 'not null' => FALSE, 'sortable' => TRUE, 'default' => '');
+      $columns['date'] = array('type' => 'varchar', 'length' => 255, 'not null' => FALSE, 'sortable' => TRUE, 'default' => '');
+      return $columns;
+  }
+}
+
+/**
+ * Implementation of CCK hook_field().
+ */
+function revision_fld_field($op, &$node, $field, &$items, $teaser, $page) {
+  switch ($op) {
+  //  case 'validate':
+    //  if (is_array($items)) {
+      //  foreach ($items as $delta => $item) {
+        //  if ($item['email'] != '' && !valid_email_address(trim($item['email']))) {
+          //  form_set_error($field['field_name'],t('"%mail" is not a valid email address',array('%mail' => $item['email'])));
+          //}
+        //}
+     //}
+     //break;
+
+    case 'sanitize':
+      foreach ($items as $delta => $item) {
+        foreach ($item as $col => $dat) {
+          $items[$delta]['safe_' . $col ] = check_plain($item[ $col ]);
+        }
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_content_is_empty().
+ */
+function revision_fld_content_is_empty($item, $field) {
+  if (empty($item['revision'])) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Implementation of hook_widget_info().
+ */
+function revision_fld_widget_info() {
+  return array(
+    'revision_entry' => array(
+      'label' => t('Text fields'),
+      'field types' => array('revision'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+      'callbacks' => array(
+        'default value' => CONTENT_CALLBACK_DEFAULT,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implementation of Form API's hook_elements().
+ *
+ * Returns a skeleton Form API array that defines callbacks
+ * for the widget form.
+ */
+function revision_fld_elements() {
+  $elements = array('revision_entry' =>
+    array(
+      '#input' => TRUE,
+      '#process' => array('revision_fld_revision_entry_process'),
+    ),
+  );
+
+  return $elements;
+}
+
+/**
+ * Process callback for widget
+ *
+ * Returns a Forms API array that defines the widget's editing form.
+ */
+function revision_fld_entry_process($element, $edit, &$form_state, $form) {
+
+  $defaults = $element['#value'];
+  $field = content_fields($element['#field_name'], $element['#type_name']);
+
+  $element['revision'] = array(
+    '#title' => t('Revision'),
+    '#type' => 'textfield',
+    '#default_value' => t('A'),
+    '#weight' => 2,
+  );
+
+  $element['date'] = array(
+    '#title' => t('Date'),
+    '#type' => 'date',
+    '#weight' => 3,
+  );
+
+ 
+
+  return $element;
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function revision_fld_theme() {
+  return array(
+    'revision_entry' => array(
+      'arguments' => array('element' => NULL),
+    ),
+    'revivision_fld_formatter_default' => array(
+      'arguments' => array('element' => NULL),
+    ),
+  );
+}
+
+/**
+ * FAPI theme for an individual text elements.
+ */
+function theme_revision_entry($element) {
+  return $element['#children'];
+}
+
+/**
+ * Implementation of hook_widget().
+ */
+function revision_fld_widget(&$form, &$form_state, $field, $items, $delta = 0) {
+  $element = array(
+    '#type' => $field['widget']['type'],
+    '#default_value' => isset($items[$delta]) ? $items[$delta] : '',
+  );
+  return $element;
+}
+
+/**
+ * Implementation of CCK's hook_field_formatter_info().
+ *
+ * Returns information about available field formatters.
+ */
+function revision_fld_field_formatter_info() {
+  return array(
+    'default' => array(
+       'label' => t('Revision Display'),
+       'field types' => array('Revision'),
+    ),
+  );
+}
+
+/**
+ * Theme function for default formatter.
+ */
+function theme_revision_fld_formatter_default($element = NULL) {
+  if(empty($element['#item'])) {
+    return '';
+  }
+
+  $stuff = $element['#item'];
+
+  $flds = array('revision', 'date');
+  $ret = '<div class="revision_info">';
+  $sep = '';
+  foreach($flds as $fld) {
+    if(!empty($stuff['safe_' . $fld ])) {
+      $ret .= $sep . '<span class="' . $fld . '">' . $stuff['safe_' . $fld ] . '</span>';
+      $sep = "<br />\n";
+    }
+  }
+
+ // if(!empty($stuff['safe_email' ])) {
+  //  $ret .= $sep . '<a class="staff_email" href="mailto:' . $stuff['safe_email' ] .
+   //   '">' . $stuff['safe_email' ] . "</a>";
+  //}
+
+  $ret .= '</div>';
+
+  return $ret;
+}

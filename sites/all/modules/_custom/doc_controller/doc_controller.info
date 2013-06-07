@@ -1,0 +1,5 @@
+; $Id$
+name = Doc Controller Module
+description = Provides Doc Controller functionality - document instruction form, issuing of numbers
+package = GHA Custom
+core = 6.x
