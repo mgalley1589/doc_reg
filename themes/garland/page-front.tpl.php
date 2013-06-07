@@ -3,7 +3,7 @@
 <?php
 global $user;
 if (!$user->uid) {
-  header("Location: http://gha.dev.centralstep.com/login?destination=dashboard");
+  header("Location: $_SERVER[HOST]/login?destination=dashboard");
 } else {} ?>
 
 

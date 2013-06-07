@@ -91,7 +91,8 @@
  */
 //$db_url = 'mysqli://gha:afEU4Xy9BWuPchb4@localhost:8889/gha';
 //$db_url = 'mysql://mjg1989_ghaadmin:gha2012?@localhost/mjg1989_gha';
-$db_url = 'mysql://root:jacamimcd2012?@localhost/gha';
+//$db_url = 'mysql://root:jacamimcd2012?@localhost/gha';
+$db_url = 'mysql://root:root@localhost/doc_reg';
 $db_prefix = '';
 
 /**
